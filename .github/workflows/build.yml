@@ -22,6 +22,8 @@ jobs:
       - name: Build project
         run: cargo build --verbose --all --all-targets
       - name: Run tests
+        env:
+          AOC_SESSION: ${{secrets.AOC_SESSION}}
         run: cargo test --verbose
       - name: Run linter
         run: cargo clippy -- -D warnings
