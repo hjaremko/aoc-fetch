@@ -31,8 +31,12 @@ pub struct AocInput {
 const INPUT_DIR: &str = "inputs";
 
 impl AocInput {
-    pub fn new(day: String, year: String, input: String) -> AocInput {
-        AocInput { day, year, input }
+    pub fn new(day: &str, year: &str, input: &str) -> AocInput {
+        AocInput {
+            day: day.to_string(),
+            year: year.to_string(),
+            input: input.to_string(),
+        }
     }
 
     pub fn save_to_file(&self) -> Result<()> {
@@ -125,7 +129,7 @@ pub fn fetch_input(day: &str, year: &str, session: &str) -> Result<AocInput> {
         ));
     }
 
-    Ok(AocInput::new(day.to_string(), year.to_string(), input))
+    Ok(AocInput::new(day, year, &input))
 }
 
 // todo
@@ -137,7 +141,7 @@ pub fn fetch_input(day: &str, year: &str, session: &str) -> Result<AocInput> {
 
 // pub fn fetch_and_save_input(day: &str, year: &str, mode: FetchMode) -> Result<String> {
 pub fn load_or_fetch_input(day: &str, year: &str) -> Result<AocInput> {
-    let input = AocInput::new(day.to_string(), year.to_string(), "".to_string());
+    let input = AocInput::new(day, year, "");
     let input_path = input.get_input_filename(INPUT_DIR);
 
     if Path::new(&input_path).exists() {
@@ -149,11 +153,7 @@ pub fn load_or_fetch_input(day: &str, year: &str) -> Result<AocInput> {
             return Err(FetchError::Cause("Unable to read the file".to_string()));
         }
 
-        Ok(AocInput::new(
-            day.to_string(),
-            year.to_string(),
-            raw_input.unwrap(),
-        ))
+        Ok(AocInput::new(day, year, &raw_input.unwrap()))
     } else {
         let session_cookie = get_session_cookie();
         let input = fetch_input(day, year, &session_cookie)?;
@@ -240,21 +240,21 @@ mod split_tests {
 
     #[test]
     fn split_as_int_vec() {
-        let input = AocInput::new("1".to_string(), "2020".to_string(), "1 2 3 4 5".to_string());
+        let input = AocInput::new("1", "2020", "1 2 3 4 5");
 
         assert_eq!(vec![1, 2, 3, 4, 5], input.split());
     }
 
     #[test]
     fn split_as_string_vec() {
-        let input = AocInput::new("1".to_string(), "2020".to_string(), "1 2 3 4 5".to_string());
+        let input = AocInput::new("1", "2020", "1 2 3 4 5");
 
         assert_eq!(vec!["1", "2", "3", "4", "5"], input.split::<String>());
     }
 
     #[test]
     fn split_with_delimiter() {
-        let input = AocInput::new("1".to_string(), "2020".to_string(), "1,2,3,4,5".to_string());
+        let input = AocInput::new("1", "2020", "1,2,3,4,5");
 
         assert_eq!(vec![1, 2, 3, 4, 5], input.split_by(","));
     }
