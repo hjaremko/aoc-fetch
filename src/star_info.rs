@@ -26,6 +26,13 @@ pub fn get_stars(task: DateInfo, session: &str) -> Result<Stars> {
 
     let input = input.unwrap().text().unwrap();
 
+    if input.contains("Please don't repeatedly request") || input.contains("Not Found") {
+        return Err(FetchError::Cause(format!(
+            "Puzzle for day {} is not live yet",
+            task.day
+        )));
+    }
+
     if input.contains("The first half of this puzzle is complete!") {
         return Ok(Stars::One);
     }
@@ -68,5 +75,13 @@ mod get_stars_tests
 
         assert!(result.is_ok());
         assert_eq!(Stars::Two, result.unwrap());
+    }
+
+    #[test]
+    fn dead_test() {
+        let session_cookie = get_session_cookie();
+        let result = get_stars(DateInfo::new("30", "2018"), &session_cookie);
+
+        assert!(result.is_err());
     }
 }
