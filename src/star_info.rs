@@ -3,7 +3,7 @@ use crate::Result;
 use log::debug;
 use reqwest::header::COOKIE;
 
-#[derive(Debug, PartialEq)]
+#[derive(Debug, PartialEq, Copy, Clone)]
 pub enum Stars
 {
     Zero,
