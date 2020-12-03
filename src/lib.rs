@@ -1,4 +1,4 @@
-mod star_info;
+pub mod star_info;
 
 use log::info;
 use reqwest::header::COOKIE;
