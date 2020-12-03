@@ -1,8 +1,21 @@
+mod star_info;
+
 use log::info;
 use reqwest::header::COOKIE;
 use std::path::Path;
 use std::str::FromStr;
 use std::{env, fmt, fs};
+
+pub struct DateInfo {
+    day: String,
+    year: String,
+}
+
+impl DateInfo {
+    pub fn new(day: &str, year: &str) -> Self {
+        DateInfo { day: day.to_string(), year: year.to_string() }
+    }
+}
 
 pub type Result<T> = std::result::Result<T, FetchError>;
 
